@@ -33,13 +33,13 @@
     FEDanmuSence *sence = [FEDanmuSence senceWithItems:items];
     
     sence.frame = CGRectMake(0, 10, self.view.bounds.size.width, 300);
-    sence.backgroundColor = [UIColor whiteColor];
+    sence.backgroundColor = [UIColor grayColor];
     sence.repeatPlay = YES;
     
     [self.view addSubview:sence];
     
     self.sence = sence;
-    self.sence.persecoundDanmu = 2;
+    self.sence.persecoundDanmu = 10;
     
     
     UIButton *start = [UIButton buttonWithType:UIButtonTypeCustom];
