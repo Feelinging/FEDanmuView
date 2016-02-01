@@ -46,11 +46,6 @@ typedef NS_ENUM(NSUInteger, FEDanmuItemContentType) {
 @interface FEDanmuItem : NSObject
 
 /**
- *  模型id，构造时自动生成
- */
-@property (nonatomic, readonly) NSString *itemId;
-
-/**
  *  弹幕的行为类型
  */
 @property (nonatomic, assign, readonly) FEDanmuItemActionType actionType;
