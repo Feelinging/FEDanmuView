@@ -77,6 +77,9 @@
 }
 
 - (void)baseInit {
+    // clipsToBounds
+    self.clipsToBounds = YES;
+    
     // init arrays
     _modelArray = [NSMutableArray array];
     
