@@ -54,6 +54,11 @@ typedef NS_ENUM(NSUInteger, FEDanmuSenceState) {
 @property (nonatomic, assign) NSUInteger persecoundDanmu;
 
 /**
+ *  弹幕轨道高度，会影响弹幕行数，默认为20
+ */
+@property (nonatomic, assign) CGFloat trackHeight;
+
+/**
  *  构造方法
  *
  *  @param items 弹幕模型数组

@@ -91,6 +91,8 @@
     
     _persecoundDanmu = 5;
     
+    _trackHeight = 20;
+    
     [self addObserve];
 }
 
@@ -205,10 +207,32 @@
     [super setFrame:frame];
     
     // 每个轨道20的高度
-    self.trackLimit = floorf((frame.size.height / 20));
+    self.trackLimit = floorf((frame.size.height / self.trackHeight));
     
     // 轨道和轨道上的弹幕视图map
     self.trackViewArray = [NSMutableArray array];
+}
+
+- (void)setTrackHeight:(CGFloat)trackHeight {
+    if (_trackHeight != trackHeight) {
+        _trackHeight = trackHeight;
+        
+        [self.trackViewArray removeAllObjects];
+        self.trackLimit = floorf(self.bounds.size.height / _trackHeight);
+        
+        switch (self.state) {
+            case FEDanmuSenceStateNone:
+            case FEDanmuSenceStatePause:
+            case FEDanmuSenceStateDown:
+                [self reset];
+                break;
+            case FEDanmuSenceStatePlaying:
+                [self restart];
+                break;
+            default:
+                break;
+        }
+    }
 }
 
 #pragma mark private method
@@ -396,7 +420,7 @@
 
 - (FEDanmuSence *)attachPositionToDanmuItemView:(FEDanmuItemView *)view {
     CGFloat x = self.bounds.size.width;
-    CGFloat y = 20 * view.track;
+    CGFloat y = self.trackHeight * view.track;
     FEDanmuItemView *formerView = [self formerViewAtTrack:view.track];
     if (formerView) {
         if (CGRectGetMaxX(formerView.frame) >= self.bounds.size.width) {
