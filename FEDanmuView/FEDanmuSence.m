@@ -46,6 +46,16 @@
  */
 @property (nonatomic, strong) NSTimer *insertDanmuItemViewTimer;
 
+/**
+ *  轨道数
+ */
+@property (nonatomic, assign) NSUInteger trackLimit;
+
+/**
+ *  轨道数对应的弹幕视图数组 @[@[view1,view2]]
+ */
+@property (nonatomic, strong) NSMutableArray *trackViewArray;
+
 @end
 
 @implementation FEDanmuSence
@@ -186,7 +196,15 @@
     }
 }
 
-
+- (void)setFrame:(CGRect)frame {
+    [super setFrame:frame];
+    
+    // 每个轨道20的高度
+    self.trackLimit = floorf((frame.size.height / 30));
+    
+    // 轨道和轨道上的弹幕视图map
+    self.trackViewArray = [NSMutableArray array];
+}
 
 #pragma mark private method
 // 重置更新位置的timer
@@ -242,6 +260,9 @@
     // 移除
     [self.usingViews removeObject:view];
     
+    // 从轨道数组移除
+    [[self trackViewArrayAtTrak:view.track] removeObject:view];
+    
     // 准备重用
     [view prepareForReuse];
     
@@ -290,9 +311,8 @@
     return self;
 }
 
-#warning 速度和初始位置有问题，待调整
 - (FEDanmuSence *)attachSpeedToDanmuItemView:(FEDanmuItemView *)view {
-    FEDanmuItemView *formerView = [self formerViewByItemView:view];
+    FEDanmuItemView *formerView = [self formerViewAtTrack:view.track];
     if (!formerView) {
         view.speed = kDefaultSpeed + arc4random_uniform(40);
     }
@@ -300,46 +320,66 @@
         CGFloat formerViewTime = CGRectGetMaxX(formerView.frame) / formerView.speed;
         CGFloat maxSpeed = CGRectGetMaxX(view.frame) / formerViewTime;
         
-        CGFloat floatPercent = arc4random_uniform(90) / 100.0;
+        CGFloat floatPercent = arc4random_uniform(100) / 100.0;
         
         CGFloat speed = formerView.speed + ABS((maxSpeed - formerView.speed)) * floatPercent;
-        if (speed > kSpeedLimit) {
-            speed = kSpeedLimit - arc4random_uniform(40);
-        }
+
         view.speed = speed;
     }
     
     return self;
 }
 
-- (FEDanmuItemView *)formerViewByItemView:(FEDanmuItemView *)view {
-    FEDanmuItemView *formerView;
-    for (FEDanmuItemView *subView in self.subviews) {
-        CGRect rect1 = subView.frame;
-        rect1.origin.x = 0;
-        
-        CGRect rect2 = view.frame;
-        rect2.origin.x = 0;
-        BOOL b = CGRectIntersectsRect(rect1, rect2);
-        
-        // 处在相似轨道
-        if (b) {
-            if ((formerView && CGRectGetMaxX(formerView.frame) <= CGRectGetMaxX(subView.frame))||!formerView) {
-                formerView = subView;
+- (Track)applyTrackForDanmuItemView:(FEDanmuItemView *)view {
+    Track nowMax = self.trackViewArray.count;
+    
+    // 轨道未使用满
+    if (nowMax < self.trackLimit) {
+        return nowMax;
+    }
+    else {
+        NSArray *smallest = self.trackViewArray[0];
+        for (int i = 1; i < self.trackViewArray.count; i++) {
+            NSArray *array = self.trackViewArray[i];
+            if (array.count < smallest.count) {
+                smallest = array;
             }
         }
+        return [self.trackViewArray indexOfObject:smallest];
     }
+}
+
+- (NSMutableArray *)trackViewArrayAtTrak:(Track)track {
+    if (self.trackViewArray.count <= track) {
+        [self.trackViewArray addObject:[NSMutableArray array]];
+        return self.trackViewArray.lastObject;
+    }
+    else {
+        return self.trackViewArray[track];
+    }
+}
+
+- (FEDanmuItemView *)formerViewAtTrack:(Track)track {
+    FEDanmuItemView *formerView = [[self trackViewArrayAtTrak:track] lastObject];
     
     return formerView;
 }
 
 - (FEDanmuSence *)addDanmuItemViewToSence:(FEDanmuItemView *)view {
-    // 设置位置和速度
-    FEDanmuSence *sence = [self attachPositionToDanmuItemView:view];
-    [sence attachSpeedToDanmuItemView:view];
+    // 设置轨道
+    view.track = [self applyTrackForDanmuItemView:view];
+    
+    // 设置起始位置
+    [self attachPositionToDanmuItemView:view];
+    
+    // 设置速度
+    [self attachSpeedToDanmuItemView:view];
+    
+    // 添加到轨道所在视图数组
+    [[self trackViewArrayAtTrak:view.track] addObject:view];
     
     // 添加到幕布
-    [sence addSubview:view];
+    [self addSubview:view];
     
     // 添加view到正在使用的数组
     [self.usingViews addObject:view];
@@ -348,19 +388,17 @@
 }
 
 - (FEDanmuSence *)attachPositionToDanmuItemView:(FEDanmuItemView *)view {
-    CGFloat x = self.bounds.size.width + arc4random_uniform(50);
-    
-    CGFloat y = arc4random_uniform((u_int32_t)(self.bounds.size.height - view.bounds.size.height));
+    CGFloat x = self.bounds.size.width;
+    CGFloat y = 20 * view.track;
+    FEDanmuItemView *formerView = [self formerViewAtTrack:view.track];
+    if (formerView) {
+        if (CGRectGetMaxX(formerView.frame) >= self.bounds.size.width) {
+            x = CGRectGetMaxX(formerView.frame) + arc4random_uniform(20);
+        }
+    }
     
     CGRect frame = CGRectMake(x, y, view.bounds.size.width, view.bounds.size.height);
     
-    FEDanmuItemView *former = [self formerViewByItemView:view];
-    if (former) {
-        BOOL intersect = CGRectIntersectsRect(former.frame, frame);
-        if (intersect) {
-            frame.origin.x = CGRectGetMaxX(former.frame) + arc4random_uniform(view.frame.size.width);
-        }
-    }
     view.frame = frame;
     
     return self;

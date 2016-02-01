@@ -14,6 +14,8 @@
 
 @class FEDanmuItem;
 
+typedef NSUInteger Track;
+
 @interface FEDanmuItemView : UIView
 
 /**
@@ -25,6 +27,11 @@
  *  移动速度
  */
 @property (nonatomic, assign) CGFloat speed;
+
+/**
+ *  所在轨道
+ */
+@property (nonatomic, assign) Track track;
 
 /**
  *  构造方法
