@@ -137,6 +137,8 @@
 - (void)reset {
     self.watingForDisplayModelArray = self.modelArray.mutableCopy;
     
+    [self.trackViewArray removeAllObjects];
+    
     [self resetInsertDanmuTimer];
     
     [self resetUpdatePositonTimer];
@@ -200,7 +202,7 @@
     [super setFrame:frame];
     
     // 每个轨道20的高度
-    self.trackLimit = floorf((frame.size.height / 30));
+    self.trackLimit = floorf((frame.size.height / 20));
     
     // 轨道和轨道上的弹幕视图map
     self.trackViewArray = [NSMutableArray array];
@@ -320,9 +322,11 @@
         CGFloat formerViewTime = CGRectGetMaxX(formerView.frame) / formerView.speed;
         CGFloat maxSpeed = CGRectGetMaxX(view.frame) / formerViewTime;
         
-        CGFloat floatPercent = arc4random_uniform(100) / 100.0;
+        CGFloat floatPercent = arc4random_uniform(50) / 100.0;
         
-        CGFloat speed = formerView.speed + ABS((maxSpeed - formerView.speed)) * floatPercent;
+        CGFloat speed = formerView.speed + ((maxSpeed - formerView.speed)) * floatPercent;
+        
+        speed = MAX(kMinSpeed, MIN(speed, kSpeedLimit));
 
         view.speed = speed;
     }
