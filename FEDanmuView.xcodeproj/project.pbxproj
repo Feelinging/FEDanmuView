@@ -14,6 +14,8 @@
 		D6FFD6231C5C95C600051AF5 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D6FFD61B1C5C95C600051AF5 /* main.m */; };
 		D6FFD6241C5C95C600051AF5 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D6FFD61D1C5C95C600051AF5 /* ViewController.m */; };
 		D6FFD6281C5C972C00051AF5 /* FEDanmuSence.m in Sources */ = {isa = PBXBuildFile; fileRef = D6FFD6271C5C972C00051AF5 /* FEDanmuSence.m */; };
+		D6FFD62B1C5C97A400051AF5 /* FEDanmuItem.m in Sources */ = {isa = PBXBuildFile; fileRef = D6FFD62A1C5C97A400051AF5 /* FEDanmuItem.m */; };
+		D6FFD62E1C5C9F5E00051AF5 /* FEDanmuItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = D6FFD62D1C5C9F5E00051AF5 /* FEDanmuItemView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,6 +31,11 @@
 		D6FFD61D1C5C95C600051AF5 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		D6FFD6261C5C972C00051AF5 /* FEDanmuSence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FEDanmuSence.h; sourceTree = "<group>"; };
 		D6FFD6271C5C972C00051AF5 /* FEDanmuSence.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FEDanmuSence.m; sourceTree = "<group>"; };
+		D6FFD6291C5C97A400051AF5 /* FEDanmuItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FEDanmuItem.h; sourceTree = "<group>"; };
+		D6FFD62A1C5C97A400051AF5 /* FEDanmuItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FEDanmuItem.m; sourceTree = "<group>"; };
+		D6FFD62C1C5C9F5E00051AF5 /* FEDanmuItemView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FEDanmuItemView.h; sourceTree = "<group>"; };
+		D6FFD62D1C5C9F5E00051AF5 /* FEDanmuItemView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FEDanmuItemView.m; sourceTree = "<group>"; };
+		D6FFD62F1C5C9FAC00051AF5 /* FEDanmuView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FEDanmuView.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,8 +85,13 @@
 		D6FFD6251C5C961E00051AF5 /* FEDanmuView */ = {
 			isa = PBXGroup;
 			children = (
+				D6FFD62F1C5C9FAC00051AF5 /* FEDanmuView.h */,
 				D6FFD6261C5C972C00051AF5 /* FEDanmuSence.h */,
 				D6FFD6271C5C972C00051AF5 /* FEDanmuSence.m */,
+				D6FFD6291C5C97A400051AF5 /* FEDanmuItem.h */,
+				D6FFD62A1C5C97A400051AF5 /* FEDanmuItem.m */,
+				D6FFD62C1C5C9F5E00051AF5 /* FEDanmuItemView.h */,
+				D6FFD62D1C5C9F5E00051AF5 /* FEDanmuItemView.m */,
 			);
 			path = FEDanmuView;
 			sourceTree = "<group>";
@@ -157,6 +169,8 @@
 				D6FFD6241C5C95C600051AF5 /* ViewController.m in Sources */,
 				D6FFD6231C5C95C600051AF5 /* main.m in Sources */,
 				D6FFD61E1C5C95C600051AF5 /* AppDelegate.m in Sources */,
+				D6FFD62B1C5C97A400051AF5 /* FEDanmuItem.m in Sources */,
+				D6FFD62E1C5C9F5E00051AF5 /* FEDanmuItemView.m in Sources */,
 				D6FFD6281C5C972C00051AF5 /* FEDanmuSence.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
