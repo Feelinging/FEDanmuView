@@ -20,11 +20,11 @@ typedef NS_ENUM(NSUInteger, FEDanmuItemActionType) {
     /**
      *  正常的弹幕，从边界进来再从另一个对称边界出去
      */
-    FEDanmuItemTypeActionNormal = 0,
+    FEDanmuItemActionTypeNormal = 0,
     /**
      *  悬浮弹幕，会在幕布上悬浮一段时间
      */
-    FEDanmuItemTypeActionSuspend = 1,
+    FEDanmuItemActionTypeSuspend = 1,
 };
 
 /**

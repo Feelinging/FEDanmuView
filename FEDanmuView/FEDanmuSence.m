@@ -170,7 +170,7 @@
 
 - (NSTimer *)insertDanmuItemViewTimer {
     if (!_insertDanmuItemViewTimer) {
-        _insertDanmuItemViewTimer = [NSTimer timerWithTimeInterval:2 target:self selector:@selector(addNewDanmuToSence) userInfo:nil repeats:YES];
+        _insertDanmuItemViewTimer = [NSTimer timerWithTimeInterval:1.0 / 5 target:self selector:@selector(addNewDanmuToSence) userInfo:nil repeats:YES];
     }
     return _insertDanmuItemViewTimer;
 }
@@ -242,21 +242,13 @@
         return self;
     }
     
-    u_int32_t countMax = MAX(3, self.bounds.size.height / 50);
-    u_int32_t countMin = 2;
-    u_int32_t count = arc4random_uniform(countMax - countMin) + countMin;
+    FEDanmuItem *item = self.watingForDisplayModelArray.firstObject;
+    FEDanmuItemView *view = [self dequeReusableViewWithItem:item];
     
-    u_int32_t i = 0;
-    while (i < MIN(self.watingForDisplayModelArray.count, count)) {
-        FEDanmuItem *item = self.watingForDisplayModelArray.firstObject;
-        FEDanmuItemView *view = [self dequeReusableViewWithItem:item];
-        
-        [self addDanmuItemViewToSence:view];
-        
-        [self.watingForDisplayModelArray removeObject:item];
-        
-        i++;
-    }
+    [self addDanmuItemViewToSence:view];
+    
+    [self.watingForDisplayModelArray removeObject:item];
+    
     return self;
 }
 

@@ -23,10 +23,10 @@
     
     NSMutableArray *items = [NSMutableArray array];
     NSArray *colors = @[[UIColor greenColor],[UIColor redColor],[UIColor purpleColor],[UIColor blueColor]];
-    for (int i = 0; i < 100; i++) {
+    for (int i = 0; i < 10000; i++) {
         UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 80, 40)];
         view.backgroundColor = [UIColor grayColor];
-        FEDanmuItem *item = [FEDanmuItem itemWithText:@"hohdsiod" actionType:FEDanmuItemTypeActionNormal contentType:FEDanmuItemContentTypeText attachView:view];
+        FEDanmuItem *item = [FEDanmuItem itemWithText:@"hohdsiod" actionType:FEDanmuItemActionTypeNormal contentType:FEDanmuItemContentTypeText attachView:view];
         item.font = [UIFont systemFontOfSize:arc4random_uniform(5) + 20.f];
         item.textColor = colors[arc4random_uniform((u_int32_t)colors.count - 1)];
         [items addObject:item];

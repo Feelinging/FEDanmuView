@@ -122,7 +122,7 @@
 }
 
 - (void)updatePosition {
-    if (self.item.actionType == FEDanmuItemTypeActionNormal) {
+    if (self.item.actionType == FEDanmuItemActionTypeNormal) {
         CGRect frame = self.frame;
         frame.origin.x -= self.speed / 60;
         self.frame = frame;
