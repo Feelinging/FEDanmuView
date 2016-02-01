@@ -76,6 +76,8 @@
     
     _reuseViews = [NSMutableArray array];
     
+    _persecoundDanmu = 5;
+    
     [self addObserve];
 }
 
@@ -115,11 +117,9 @@
         [self reset];
     }
     
-    [self.updatePositionTimer addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
+    [self startInsertDanmuTimer];
     
-    [[NSRunLoop mainRunLoop] addTimer:self.insertDanmuItemViewTimer forMode:NSDefaultRunLoopMode];
-    
-    [self.insertDanmuItemViewTimer fire];
+    [self startUpdatePositionTimer];
     
     _state = FEDanmuSenceStatePlaying;
 }
@@ -127,11 +127,9 @@
 - (void)reset {
     self.watingForDisplayModelArray = self.modelArray.mutableCopy;
     
-    [_updatePositionTimer invalidate];
-    _updatePositionTimer = nil;
+    [self resetInsertDanmuTimer];
     
-    [_insertDanmuItemViewTimer invalidate];
-    _insertDanmuItemViewTimer = nil;
+    [self resetUpdatePositonTimer];
     
     for (FEDanmuItemView *subview in self.subviews) {
         [self danmuViewReachedLimitBounds:subview];
@@ -143,21 +141,21 @@
 - (void)pause {
     if (self.state == FEDanmuSenceStatePause) return;
     
-    [_updatePositionTimer invalidate];
-    _updatePositionTimer = nil;
+    [self resetUpdatePositonTimer];
     
-    [_insertDanmuItemViewTimer invalidate];
-    _insertDanmuItemViewTimer = nil;
+    [self resetInsertDanmuTimer];
     
     _state = FEDanmuSenceStatePause;
 }
 
 - (void)restart {
-    [self.updatePositionTimer addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
+    [self reset];
     
-    [[NSRunLoop mainRunLoop] addTimer:self.insertDanmuItemViewTimer forMode:NSDefaultRunLoopMode];
+    [self startUpdatePositionTimer];
     
-    [self.insertDanmuItemViewTimer fire];
+    [self startInsertDanmuTimer];
+    
+    _state = FEDanmuSenceStatePlaying;
 }
 
 #pragma mark getter&setter
@@ -170,12 +168,52 @@
 
 - (NSTimer *)insertDanmuItemViewTimer {
     if (!_insertDanmuItemViewTimer) {
-        _insertDanmuItemViewTimer = [NSTimer timerWithTimeInterval:1.0 / 5 target:self selector:@selector(addNewDanmuToSence) userInfo:nil repeats:YES];
+        _insertDanmuItemViewTimer = [NSTimer timerWithTimeInterval:1.0 / self.persecoundDanmu target:self selector:@selector(addNewDanmuToSence) userInfo:nil repeats:YES];
     }
     return _insertDanmuItemViewTimer;
 }
 
+- (void)setPersecoundDanmu:(NSUInteger)persecoundDanmu {
+    if (_persecoundDanmu != persecoundDanmu) {
+        _persecoundDanmu = persecoundDanmu;
+        
+        // 
+        [self resetInsertDanmuTimer];
+        
+        if (self.state == FEDanmuSenceStatePlaying) {
+            [self startInsertDanmuTimer];
+        }
+    }
+}
+
+
+
 #pragma mark private method
+// 重置更新位置的timer
+- (void)resetUpdatePositonTimer {
+    [_updatePositionTimer invalidate];
+    _updatePositionTimer = nil;
+}
+
+// 重置插入弹幕的timer
+- (void)resetInsertDanmuTimer {
+    [_insertDanmuItemViewTimer invalidate];
+    _insertDanmuItemViewTimer = nil;
+}
+
+// 启动更新位置的timer
+- (void)startUpdatePositionTimer {
+    [self.updatePositionTimer addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
+}
+
+// 启动插入弹幕的timer
+- (void)startInsertDanmuTimer {
+    [[NSRunLoop mainRunLoop] addTimer:self.insertDanmuItemViewTimer forMode:NSDefaultRunLoopMode];
+    
+    [self.insertDanmuItemViewTimer fire];
+}
+
+// 获取可用的弹幕视图
 - (FEDanmuItemView *)dequeReusableViewWithItem:(FEDanmuItem *)item {
     FEDanmuItemView *view;
     

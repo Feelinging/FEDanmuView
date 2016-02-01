@@ -49,6 +49,11 @@ typedef NS_ENUM(NSUInteger, FEDanmuSenceState) {
 @property (nonatomic, assign) BOOL repeatPlay;
 
 /**
+ *  每秒产生多少个弹幕， 默认为5
+ */
+@property (nonatomic, assign) NSUInteger persecoundDanmu;
+
+/**
  *  构造方法
  *
  *  @param items 弹幕模型数组
