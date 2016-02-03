@@ -11,4 +11,5 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = "7.0"
   s.source       = { :git => "https://github.com/Feelinging/FEDanmuView.git", :tag => s.version}
   s.requires_arc = true
+  s.source_files  = 'FEDanmuView/*.{h,m}'
 end
