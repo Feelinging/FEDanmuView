@@ -10,9 +10,6 @@
 #import "FEDanmuItem.h"
 #import "FEDanmuItemView.h"
 
-#define kMinSpeed self.bounds.size.width / 8.f
-#define kDefaultSpeed self.bounds.size.width / 5.f
-#define kSpeedLimit self.bounds.size.width / 3.f
 
 @interface FEDanmuSence ()
 
@@ -39,7 +36,7 @@
 /**
  *  更新位置的计时器
  */
-@property (nonatomic, strong) CADisplayLink *updatePositionTimer;
+@property (nonatomic, strong) NSTimer *updatePositionTimer;
 
 /**
  *  插入弹幕视图的timer
@@ -55,6 +52,21 @@
  *  轨道数对应的弹幕视图数组 @[@[view1,view2]]
  */
 @property (nonatomic, strong) NSMutableArray *trackViewArray;
+
+/**
+ *  根据最短存留时间计算出来的最大速度
+ */
+@property (nonatomic, assign) CGFloat maxSpeed;
+
+/**
+ *  根据最长存留时间计算出来的最小速度
+ */
+@property (nonatomic, assign) CGFloat minSpeed;
+
+/**
+ *  根据最长最短时间计算出来的中间速度
+ */
+@property (nonatomic, assign) CGFloat middleSpeed;
 
 @end
 
@@ -89,9 +101,15 @@
     
     _reuseViews = [NSMutableArray array];
     
+    _fps = 30;
+    
     _persecoundDanmu = 5;
     
     _trackHeight = 20;
+    
+    _maxDuration = 10.f;
+    
+    _minDuration = 5.f;
     
     [self addObserve];
 }
@@ -176,9 +194,9 @@
 }
 
 #pragma mark getter&setter
-- (CADisplayLink *)updatePositionTimer {
+- (NSTimer *)updatePositionTimer {
     if (!_updatePositionTimer) {
-        _updatePositionTimer = [CADisplayLink displayLinkWithTarget:self selector:@selector(updatePositions)];
+        _updatePositionTimer = [NSTimer timerWithTimeInterval:1.0 / self.fps target:self selector:@selector(updatePositions) userInfo:nil repeats:YES];
     }
     return _updatePositionTimer;
 }
@@ -207,10 +225,14 @@
     [super setFrame:frame];
     
     // 每个轨道20的高度
-    self.trackLimit = floorf((frame.size.height / self.trackHeight));
+    self.trackLimit = floorf((self.bounds.size.height / self.trackHeight));
     
     // 轨道和轨道上的弹幕视图map
     self.trackViewArray = [NSMutableArray array];
+    
+    // 计算最大速度和最小速度
+    [self calculateMaxSpeed];
+    [self calculateMinSpeed];
 }
 
 - (void)setTrackHeight:(CGFloat)trackHeight {
@@ -235,6 +257,24 @@
     }
 }
 
+- (void)setMinDuration:(CGFloat)minDuration {
+    if (minDuration <= 0) return;
+    if (_minDuration != minDuration) {
+        _minDuration = minDuration;
+        
+        [self calculateMaxSpeed];
+    }
+}
+
+- (void)setMaxDuration:(CGFloat)maxDuration {
+    if (maxDuration <= 0) return;
+    if (_maxDuration != maxDuration) {
+        _maxDuration = maxDuration;
+        
+        [self calculateMinSpeed];
+    }
+}
+
 #pragma mark private method
 // 重置更新位置的timer
 - (void)resetUpdatePositonTimer {
@@ -248,9 +288,24 @@
     _insertDanmuItemViewTimer = nil;
 }
 
+- (void)calculateMaxSpeed {
+    self.maxSpeed = self.bounds.size.width / _minDuration;
+}
+
+- (void)calculateMinSpeed {
+    self.minSpeed = self.bounds.size.width / _maxDuration;
+}
+
+- (CGFloat)randomSpeed {
+    CGFloat delta = self.maxSpeed - self.minSpeed;
+    return self.minSpeed + delta * arc4random_uniform(100) / 100.f;
+}
+
 // 启动更新位置的timer
 - (void)startUpdatePositionTimer {
-    [self.updatePositionTimer addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
+    [[NSRunLoop mainRunLoop] addTimer:self.updatePositionTimer forMode:NSDefaultRunLoopMode];
+    
+    [self.updatePositionTimer fire];
 }
 
 // 启动插入弹幕的timer
@@ -303,7 +358,7 @@
 - (FEDanmuSence *)updatePositions {
     NSArray *tmp = self.usingViews.copy;
     for (FEDanmuItemView *view in tmp) {
-        [view updatePosition];
+        [view updatePositionWithFps:self.fps];
         
         if (CGRectGetMaxX(view.frame) < 0) {
             [self danmuViewReachedLimitBounds:view];
@@ -343,17 +398,17 @@
 - (FEDanmuSence *)attachSpeedToDanmuItemView:(FEDanmuItemView *)view {
     FEDanmuItemView *formerView = [self formerViewAtTrack:view.track];
     if (!formerView) {
-        view.speed = kDefaultSpeed + arc4random_uniform(40);
+        view.speed = [self randomSpeed];
     }
     else {
         CGFloat formerViewTime = CGRectGetMaxX(formerView.frame) / formerView.speed;
         CGFloat maxSpeed = CGRectGetMaxX(view.frame) / formerViewTime;
         
-        CGFloat floatPercent = arc4random_uniform(50) / 100.0;
+        maxSpeed = MIN(maxSpeed, self.maxSpeed);
+        
+        CGFloat floatPercent = arc4random_uniform(100) / 100.0;
         
         CGFloat speed = formerView.speed + ((maxSpeed - formerView.speed)) * floatPercent;
-        
-        speed = MAX(kMinSpeed, MIN(speed, kSpeedLimit));
 
         view.speed = speed;
     }
@@ -424,10 +479,9 @@
     FEDanmuItemView *formerView = [self formerViewAtTrack:view.track];
     if (formerView) {
         if (CGRectGetMaxX(formerView.frame) >= self.bounds.size.width) {
-            x = CGRectGetMaxX(formerView.frame) + arc4random_uniform(20);
+            x = CGRectGetMaxX(formerView.frame) + arc4random_uniform(50);
         }
     }
-    
     CGRect frame = CGRectMake(x, y, view.bounds.size.width, view.bounds.size.height);
     
     view.frame = frame;

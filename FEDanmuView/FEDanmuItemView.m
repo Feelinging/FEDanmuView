@@ -121,10 +121,10 @@
     return self;
 }
 
-- (void)updatePosition {
+- (void)updatePositionWithFps:(NSUInteger)fps {
     if (self.item.actionType == FEDanmuItemActionTypeNormal) {
         CGRect frame = self.frame;
-        frame.origin.x -= self.speed / 60;
+        frame.origin.x -= self.speed / fps;
         self.frame = frame;
     }
 }

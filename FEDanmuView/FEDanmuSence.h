@@ -49,6 +49,21 @@ typedef NS_ENUM(NSUInteger, FEDanmuSenceState) {
 @property (nonatomic, assign) BOOL repeatPlay;
 
 /**
+ *  弹幕留存的最长时间，也就是弹幕速度最慢时，默认10秒
+ */
+@property (nonatomic, assign) CGFloat maxDuration;
+
+/**
+ *  弹幕留存的最短时间，也就是弹幕速度最快时，默认5秒
+ */
+@property (nonatomic, assign) CGFloat minDuration;
+
+/**
+ *  刷新频率, 默认30帧
+ */
+@property (nonatomic, assign) NSUInteger fps;
+
+/**
  *  每秒产生多少个弹幕， 默认为5
  */
 @property (nonatomic, assign) NSUInteger persecoundDanmu;
@@ -71,7 +86,7 @@ typedef NS_ENUM(NSUInteger, FEDanmuSenceState) {
 - (void)resetWithItems:(NSArray<FEDanmuItem *> *)items;
 
 /**
- *  新增一个弹幕
+ *  新增一个弹幕,会即时显示
  */
 - (void)insertItem:(FEDanmuItem *)item;
 

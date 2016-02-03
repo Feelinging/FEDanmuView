@@ -24,7 +24,7 @@ typedef NSUInteger Track;
 @property (nonatomic, strong, readonly) FEDanmuItem *item;
 
 /**
- *  移动速度
+ *  每秒移动速度
  */
 @property (nonatomic, assign) CGFloat speed;
 
@@ -54,7 +54,9 @@ typedef NSUInteger Track;
 
 /**
  *  更新位置
+ *
+ *  @param fps 帧数
  */
-- (void)updatePosition;
+- (void)updatePositionWithFps:(NSUInteger)fps;
 
 @end
