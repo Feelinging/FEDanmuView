@@ -76,6 +76,16 @@ typedef NS_ENUM(NSUInteger, FEDanmuItemContentType) {
 @property (nonatomic, strong) UIFont *font;
 
 /**
+ *  边框宽度，默认为0
+ */
+@property (nonatomic, assign) float borderWidth;
+
+/**
+ *  边框颜色，默认为nil
+ */
+@property (nonatomic, strong) UIColor *borderColor;
+
+/**
  *  构造方法
  *
  *  @param text        文字内容

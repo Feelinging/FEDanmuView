@@ -83,6 +83,9 @@
     
     self.backgroundImageView.hidden = NO;
     
+    self.layer.borderWidth = item.borderWidth;
+    self.layer.borderColor = item.borderColor.CGColor;
+    
     switch (item.contentType) {
         case FEDanmuItemContentTypeText:
             // set text
