@@ -1,6 +1,81 @@
 # FEDanmuView
 
-## Inilization
+## 结构介绍
+
+基于MVC思想
+
+类: FEDanmuItem(Model) , FEDanmuItemView(View),FEDanmuSence(Controller)
+
+##### FEDanmuItem
+
+``` 
+/**
+ *  构造方法
+ *
+ *  @param text        文字内容
+ *  @param actionType  弹幕的行为类型
+ *  @param contentType 弹幕的内容类型
+ *  @param attachView  弹幕会直接显示这个View
+ */
++ (instancetype)itemWithText:(NSString *)text
+                  actionType:(FEDanmuItemActionType)ationType
+                 contentType:(FEDanmuItemContentType)contentType
+                  attachView:(UIView *)attachView;
+                  
+/**
+ *  弹幕行为类型枚举
+ */
+typedef NS_ENUM(NSUInteger, FEDanmuItemActionType) {
+    /**
+     *  正常的弹幕，从边界进来再从另一个对称边界出去
+     */
+    FEDanmuItemActionTypeNormal = 0,
+    /**
+     *  悬浮弹幕，会在幕布上悬浮一段时间
+     */
+    FEDanmuItemActionTypeSuspend = 1, (还未实现该类型的特殊显示效果)
+};
+
+/**
+ *  弹幕内容类型美剧
+ */
+typedef NS_ENUM(NSUInteger, FEDanmuItemContentType) {
+    /**
+     *  纯文本弹幕
+     */
+    FEDanmuItemContentTypeText = 0,
+    /**
+     *  使用UIView作为要显示内容的弹幕
+     */
+    FEDanmuItemContentTypeView = 1,
+};
+```
+
+FEDanmuItemView: 作为MVC架构里的View层用于显示弹幕，实际使用中可能不需要接触这个类
+
+``` 
+/**
+ *  构造方法
+ *
+ *  @param item 弹幕模型
+ */
++ (instancetype)itemViewWithItem:(FEDanmuItem *)item;
+```
+
+FEDanmuSence: 作为MVC架构里面的Controller，用于控制弹幕的显示速度，发射频率，刷新帧率等
+
+``` 
+/**
+ *  构造方法
+ *
+ *  @param items 弹幕模型数组
+ */
++ (instancetype)senceWithItems:(NSArray<FEDanmuItem *> *)items;
+```
+
+
+
+## 如何构造一个弹幕幕布
 
 ``` 
 // items
@@ -18,7 +93,7 @@ for (int i = 0; i < 10000; i++) {
 FEDanmuSence *sence = [FEDanmuSence senceWithItems:items];
 ```
 
-## Control the Display
+## 控制弹幕的显示
 
 To start display danmu use
 
