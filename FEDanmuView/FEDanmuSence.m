@@ -352,6 +352,11 @@
     
     [self.reuseViews addObject:view];
     
+    // 播放完了
+    if (self.usingViews.count == 0 && self.watingForDisplayModelArray.count == 0) {
+        _state = FEDanmuSenceStateDown;
+    }
+    
     return self;
 }
 
@@ -370,13 +375,14 @@
 - (FEDanmuSence *)addNewDanmuToSence {
     if (self.watingForDisplayModelArray.count == 0){
         if (self.repeatPlay) {
+            if (self.state != FEDanmuSenceStateDown) {
+                return self;
+            }
             self.watingForDisplayModelArray = self.modelArray.mutableCopy;
             [_insertDanmuItemViewTimer invalidate];
             _insertDanmuItemViewTimer = nil;
             
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [self restart];
-            });
+            [self restart];
         }
         else {
             _state = FEDanmuSenceStateNone;
