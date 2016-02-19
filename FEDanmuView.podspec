@@ -1,7 +1,7 @@
 #FEDanmuView.podspec
 Pod::Spec.new do |s|
   s.name         = "FEDanmuView"
-  s.version      = "0.1"
+  s.version      = "0.1.1"
   s.summary      = "一个简单好用的用于显示弹幕的视图"
 
   s.homepage     = "https://github.com/Feelinging/FEDanmuView"
