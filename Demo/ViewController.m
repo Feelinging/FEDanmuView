@@ -24,9 +24,9 @@
     NSMutableArray *items = [NSMutableArray array];
     NSArray *colors = @[[UIColor blueColor],[UIColor redColor],[UIColor purpleColor],[UIColor orangeColor]];
     NSArray *texts = @[@"Hey Buddy",@"Are U ok Leibos!",@"Japanese Animation",@"Kirayamato",@"Happy New Year!"];
-    for (int i = 0; i < 10000; i++) {
+    for (int i = 0; i < 10; i++) {
         NSString *text = texts[arc4random_uniform((u_int32_t)texts.count)];
-        FEDanmuItem *item = [FEDanmuItem itemWithText:text actionType:FEDanmuItemActionTypeNormal contentType:FEDanmuItemContentTypeText attachView:nil];
+        FEDanmuItem *item = [FEDanmuItem itemWithText:text backgroundImage:nil actionType:FEDanmuItemActionTypeNormal contentType:FEDanmuItemContentTypeText attachView:nil];
         item.font = [UIFont systemFontOfSize:arc4random_uniform(5) + 20.f];
         item.textColor = colors[arc4random_uniform((u_int32_t)colors.count )];
         [items addObject:item];
@@ -90,7 +90,7 @@
 }
 
 - (void)insert {
-    FEDanmuItem *item = [FEDanmuItem itemWithText:@"This is a insert text!" actionType:FEDanmuItemActionTypeNormal contentType:FEDanmuItemContentTypeText attachView:nil];
+    FEDanmuItem *item = [FEDanmuItem itemWithText:@"This is a insert text!" backgroundImage:nil actionType:FEDanmuItemActionTypeNormal contentType:FEDanmuItemContentTypeText attachView:nil];
     item.borderWidth = 2.f;
     item.borderColor = [UIColor blackColor];
     item.font = [UIFont systemFontOfSize:30];

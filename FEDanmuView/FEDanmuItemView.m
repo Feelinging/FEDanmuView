@@ -47,6 +47,7 @@
     
     // 背景图
     _backgroundImageView = [[UIImageView alloc] init];
+    _backgroundImageView.contentMode = UIViewContentModeScaleAspectFill;
     
     [self addSubview:_backgroundImageView];
     
@@ -103,8 +104,9 @@
             
             self.bounds = CGRectMake(0, 0, self.textLabel.bounds.size.width + 2, self.textLabel.bounds.size.height + 2);
             
-            self.backgroundImageView.frame = CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height);
+            self.backgroundImageView.frame = CGRectMake(self.backgroundImageViewExpandInsets.left, self.backgroundImageViewExpandInsets.top, self.bounds.size.width + self.backgroundImageViewExpandInsets.left + self.backgroundImageViewExpandInsets.right, self.bounds.size.height + self.backgroundImageViewExpandInsets.top + self.backgroundImageViewExpandInsets.bottom);
             
+            self.backgroundImageView.image = item.backgroundImage;
             break;
         case FEDanmuItemContentTypeView:
             // hide textLabel and backgroundView

@@ -41,7 +41,7 @@ typedef NS_ENUM(NSUInteger, FEDanmuItemContentType) {
     FEDanmuItemContentTypeView = 1,
 };
 
-@class UIView,UIFont,UIColor;
+@class UIView,UIFont,UIColor,UIImage;
 
 @interface FEDanmuItem : NSObject
 
@@ -64,6 +64,11 @@ typedef NS_ENUM(NSUInteger, FEDanmuItemContentType) {
  *  弹幕的文字内容
  */
 @property (nonatomic, copy, readonly) NSString *text;
+
+/**
+ *  背景图片
+ */
+@property (nonatomic, strong, readonly) UIImage *backgroundImage;
 
 /**
  *  弹幕文字颜色
@@ -94,6 +99,7 @@ typedef NS_ENUM(NSUInteger, FEDanmuItemContentType) {
  *  @param attachView  用于显示的view
  */
 + (instancetype)itemWithText:(NSString *)text
+             backgroundImage:(UIImage *)backgroundImage
                   actionType:(FEDanmuItemActionType)ationType
                  contentType:(FEDanmuItemContentType)contentType
                   attachView:(UIView *)attachView;

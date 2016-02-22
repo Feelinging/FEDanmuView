@@ -34,6 +34,11 @@ typedef NSUInteger Track;
 @property (nonatomic, assign) Track track;
 
 /**
+ *  背景图片相对于Label的缩进
+ */
+@property (nonatomic, assign) UIEdgeInsets backgroundImageViewExpandInsets;
+
+/**
  *  构造方法
  *
  *  @param item 弹幕模型
