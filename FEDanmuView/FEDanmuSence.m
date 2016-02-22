@@ -36,7 +36,7 @@
 /**
  *  更新位置的计时器
  */
-@property (nonatomic, strong) NSTimer *updatePositionTimer;
+@property (nonatomic, strong) CADisplayLink *updatePositionTimer;
 
 /**
  *  插入弹幕视图的timer
@@ -194,9 +194,10 @@
 }
 
 #pragma mark getter&setter
-- (NSTimer *)updatePositionTimer {
+- (CADisplayLink *)updatePositionTimer {
     if (!_updatePositionTimer) {
-        _updatePositionTimer = [NSTimer timerWithTimeInterval:1.0 / self.fps target:self selector:@selector(updatePositions) userInfo:nil repeats:YES];
+        _updatePositionTimer = [CADisplayLink displayLinkWithTarget:self selector:@selector(updatePositions)];
+        _updatePositionTimer.frameInterval = 60 / self.fps;
     }
     return _updatePositionTimer;
 }
@@ -303,9 +304,7 @@
 
 // 启动更新位置的timer
 - (void)startUpdatePositionTimer {
-    [[NSRunLoop mainRunLoop] addTimer:self.updatePositionTimer forMode:NSDefaultRunLoopMode];
-    
-    [self.updatePositionTimer fire];
+    [self.updatePositionTimer addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
 }
 
 // 启动插入弹幕的timer
