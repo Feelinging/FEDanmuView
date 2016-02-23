@@ -6,7 +6,7 @@
 //  Copyright © 2016年 feeling. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 /**
  *  弹幕数据模型
@@ -41,7 +41,6 @@ typedef NS_ENUM(NSUInteger, FEDanmuItemContentType) {
     FEDanmuItemContentTypeView = 1,
 };
 
-@class UIView,UIFont,UIColor,UIImage;
 
 @interface FEDanmuItem : NSObject
 
@@ -89,6 +88,11 @@ typedef NS_ENUM(NSUInteger, FEDanmuItemContentType) {
  *  边框颜色，默认为nil
  */
 @property (nonatomic, strong) UIColor *borderColor;
+
+/**
+ *  背景图片相对于Label的缩进
+ */
+@property (nonatomic, assign) UIEdgeInsets backgroundImageViewExpandInsets;
 
 /**
  *  构造方法
