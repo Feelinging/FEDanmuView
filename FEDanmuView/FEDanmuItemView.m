@@ -47,7 +47,6 @@
     
     // 背景图
     _backgroundImageView = [[UIImageView alloc] init];
-    _backgroundImageView.contentMode = UIViewContentModeScaleAspectFill;
     
     [self addSubview:_backgroundImageView];
     
