@@ -102,11 +102,15 @@
             // change frame
             [self.textLabel sizeToFit];
             
-            self.bounds = CGRectMake(0, 0, self.textLabel.bounds.size.width + 2, self.textLabel.bounds.size.height + 2);
-            
-            self.backgroundImageView.frame = CGRectMake(item.backgroundImageViewExpandInsets.left, item.backgroundImageViewExpandInsets.top, self.bounds.size.width + item.backgroundImageViewExpandInsets.left + item.backgroundImageViewExpandInsets.right, self.bounds.size.height + item.backgroundImageViewExpandInsets.top + item.backgroundImageViewExpandInsets.bottom);
+            self.backgroundImageView.frame = CGRectMake(0, 0, self.textLabel.bounds.size.width + item.backgroundImageViewExpandInsets.left + item.backgroundImageViewExpandInsets.right, self.textLabel.bounds.size.height + item.backgroundImageViewExpandInsets.top + item.backgroundImageViewExpandInsets.bottom);
             
             self.backgroundImageView.image = item.backgroundImage;
+            
+            self.textLabel.frame = CGRectMake(item.backgroundImageViewExpandInsets.left, item.backgroundImageViewExpandInsets.top, self.textLabel.bounds.size.width, self.textLabel.bounds.size.height);
+            
+            self.bounds = self.backgroundImageView.bounds;
+            
+            
             break;
         case FEDanmuItemContentTypeView:
             // hide textLabel and backgroundView
